@@ -20,6 +20,7 @@ client.connect(err => {
   const serviceCollection = client.db("dayCare").collection("services");
   const reviewCollection= client.db("dayCare").collection("reviews");
   const bookingCollection= client.db("dayCare").collection("book");
+  const AdminCollection=client.db("dayCare").collection("admin");
 
   app.post('/addService',(req,res)=>{
       const newService=req.body
@@ -86,6 +87,16 @@ app.get('/bookings',(req,res)=>{
     bookingCollection.find({email: req.query.email})
     .toArray((err,documents)=>{
         res.send(documents);
+    })
+})
+
+app.post('/isAdmin',(req,res)=>{
+    const email = req.body.email;
+   
+    AdminCollection.insertOne(email)
+    .then(result=>{
+
+        res.send(result.insertedCount>0);
     })
 })
 
