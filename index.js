@@ -7,7 +7,7 @@ require('dotenv').config()
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.4n73f.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
- console.log(process.env.DB_PASS);
+
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -20,6 +20,7 @@ client.connect(err => {
   const serviceCollection = client.db("dayCare").collection("services");
   const reviewCollection= client.db("dayCare").collection("reviews");
   const bookingCollection= client.db("dayCare").collection("book");
+
   app.post('/addService',(req,res)=>{
       const newService=req.body
      
@@ -29,6 +30,7 @@ client.connect(err => {
           res.send(result.insertedCount>0);
       })
   })
+
 app.get('/allService',(req,res)=>{
     serviceCollection.find()
     .toArray((err,documents)=>{
@@ -43,7 +45,6 @@ serviceCollection.find({_id:ObjectId(req.params.id)})
     res.send(documents[0]);
 })
 })
-
 
 
 app.post('/addReview',(req,res)=>{
@@ -88,13 +89,15 @@ app.get('/bookings',(req,res)=>{
     })
 })
 
+
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+  })
   console.log('db connected')
   
 });
 
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+
 
 app.listen(process.env.PORT || port)
